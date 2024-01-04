@@ -1,0 +1,7 @@
+{% extends "finance/base.html" %}
+{% block content %}
+    {% for saving in savings %}
+        <h1>testing savings posted by {{ saving.user }}</h1>
+    {% endfor %}
+    <h1>savings posted</h1>
+{% endblock content %}

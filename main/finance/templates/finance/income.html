@@ -1,0 +1,22 @@
+{% extends "finance/base.html" %}
+{% load humanize %} <!-- Load the humanize template library -->
+{% block content %}
+    
+    {% for income in income_list %}
+        <article class="media content-section">
+            <div class="media-body">
+                <div class="article-metadata">
+                    <h2><a class="article-title" href="#">{{ income.title }}</a></h2>
+                    <a class="mr-2" href="#">{{ income.user }}</a>
+                    <small class="text-muted">{{ income.date_joined|date:"F d, Y" }}</small>
+                </div>
+                <h2><a class="article-title" href="#">
+                    {{ income.amount|floatformat:2|intcomma }}
+                </a></h2>
+                <p class="article-content">{{ income.get_category_display }}</p>
+                <!-- You can add more details here based on your needs -->
+            </div>
+        </article>
+    {% endfor %}
+
+{% endblock %}
