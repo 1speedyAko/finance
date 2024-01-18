@@ -1,7 +1,7 @@
 from django.db import models
 from users.models import CustomUser
 from django.utils import timezone
-
+from django.urls import reverse
 
 class Category(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -33,6 +33,9 @@ class Income(models.Model):
     def __str__(self):
         return f" posted by {self.user}  is {self.amount}"
     
+    def get_absolute_url(self):
+        return reverse('income' )
+
 class Savings(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     goal = models.CharField(max_length=30, blank=False)
@@ -43,8 +46,6 @@ class Savings(models.Model):
     def __str__(self):
         return str(self.user)
 
-    # def save(self, *args, **kwargs):
-    #     super(Savings,self).save(*args, **kwargs)
     
 
 class Expense(models.Model):

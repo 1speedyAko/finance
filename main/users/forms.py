@@ -23,7 +23,7 @@ class CustomUserCreationForm(UserCreationForm):
             raise ValidationError("Passwords don't match")
         return password2
 
-    def save(self , commit=True):
+    def save(self,commit=True):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data["password1"])
 
@@ -38,4 +38,4 @@ class CustomUserChangeForm(forms.ModelForm):
 
     class Meta:
         model = UserModel
-        fields =( 'username','email','is_staff','is_active', 'date_joined')
+        fields = ( 'username','email','is_staff','is_active', 'date_joined')

@@ -14,19 +14,32 @@
       {% else %}
           <title> Dashboard</title>
       {% endif %}
+
+      <style>
+        body {
+            background-image: url('{% static "finance/belgian.jpeg" %}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed; 
+        }
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.9); /* Adjust the transparency as needed */
+        }
+        /* Add any additional styling for your content here */
+    </style>
 </head>
 <body >
   <div>
     <nav class="navbar bg-light fixed-top">
       <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'home'%}"> West K9</a>
+        <a class="navbar-brand text-dark" href="{% url 'home'%}"> West K9</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
           <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Dashboard</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <button type="button" class="btn-close btn-light" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
           <div class="offcanvas-body">
             <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
@@ -34,7 +47,7 @@
                 <a class="nav-link active" aria-current="page" href="{%url 'home'%}">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{%url 'income'%}">Income</a>
+                <a class="nav-link active" aria-current="page" href="{%url 'income-list'%}">Income</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{%url 'expense'%}">Expense</a>
@@ -48,56 +61,25 @@
                   Account
                 </a>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Sign In</a></li>
-                  <li><a class="dropdown-item" href="#">Register</a></li>
-                  <li>
-                    <hr class="dropdown-divider">
-                  </li>
-                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                  {% if user.is_authenticated %}
+                    <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                    <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+                    <li><a class="dropdown-item" href="{% url 'income-create' %}">Add New Income</a></li>
+
+                  {% else%}
+                    <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
+                    <li><a class="dropdown-item" href="{% url 'register' %}">Register</a></li>
+                  {% endif %}
+                  
                 </ul>
               </li>
             </ul>
-            <form class="d-flex mt-3" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
           </div>
         </div>
       </div>
     </nav>
   
-    <div class="mt-4">
-      <div class="container text-center mt-4">
-          <div class="row mx-auto">
-              <div class="col-12 col-md-4 mb-3">
-                  <a href="{%url 'income'%}" class="card border-primary mb-3 text-decoration-none" style="max-width: 18rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-                      <div class="card-header">Income</div>
-                      <div class="card-body text-primary">
-                          <h5 class="card-title">Primary card title</h5>
-                          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                      </div>
-                  </a>
-              </div>
-              <div class="col-12 col-md-4 mb-3">
-                  <a href="{%url 'expense'%}" class="card border-secondary mb-3 text-decoration-none" style="max-width: 18rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-                      <div class="card-header">Expense</div>
-                      <div class="card-body text-secondary">
-                          <h5 class="card-title">Secondary card title</h5>
-                          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                      </div>
-                  </a>
-              </div>
-              <div class="col-12 col-md-4 mb-3">
-                  <a href="{%url 'savings'%}" class="card border-success mb-3 text-decoration-none" style="max-width: 18rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-                      <div class="card-header">Savings</div>
-                      <div class="card-body text-success">
-                          <h5 class="card-title">Success card title</h5>
-                          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                      </div>
-                  </a>
-              </div>
-          </div>
-      </div>
+    
       <div class="container">
         {% if messages %}
           {% for message in messages %}

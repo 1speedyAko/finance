@@ -1,0 +1,24 @@
+{% extends "finance/base.html" %}
+{% load humanize %} 
+{% block content %}
+    <article class="media content-section">
+        <div class="media-body">
+            <div class="article-metadata">
+                <h2><a class="article-title" href="{% url 'income-detail' object.id %}">{{ object.title }}</a></h2>
+                <a class="mr-2" href="#">{{ object.user }}</a>
+                <small class="text-muted">{{ object.date_joined|date:"F d, Y" }}</small>
+                {% if object.user == user %}
+                    <div>
+                        <a class="btn btn-secondary btn-sm mt-2 mb-2" href="{% url 'income-update' object.id%}">Update</a>
+                        <a class="btn btn-danger btn-sm mt-2 mb-2" href="{% url 'income-delete' object.id%}">Delete</a>
+                    </div>
+
+                {% endif%}
+            </div>
+            <p class="article-content">{{ object.get_category_display }}</p>
+            <h4  class="article-content">
+                {{ object.amount|floatformat:2|intcomma }}
+            </h4>
+        </div>
+    </article>
+{% endblock %}

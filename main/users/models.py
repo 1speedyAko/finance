@@ -21,4 +21,9 @@ class CustomUser(AbstractBaseUser,PermissionsMixin):
 
     def __str__(self):
         return self.username
- 
+
+def Profile(request):
+    user = models.oneTOoneField(CustomUser, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'self.user.username', Profile
