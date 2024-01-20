@@ -46,14 +46,18 @@ class Savings(models.Model):
     def __str__(self):
         return str(self.user)
 
-    
+    def get_absolute_url(self):
+        return reverse('saving', args=[str(self.pk)])
 
 class Expense(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     expense_incured = models.CharField(max_length = 30, blank=False, default=0)
     amount_incured = models.DecimalField(max_digits=10, decimal_places=2)
-    date = models.DateField()
+    date = models.DateTimeField(default=timezone.now)
 
 
     def __str__(self):
         return str(self.user)
+
+    def get_absolute_url(self):
+        return reverse('expense', kwargs = {'pk': self.pk})

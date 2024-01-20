@@ -1,0 +1,26 @@
+{% extends "finance/base.html" %}
+{% load humanize %} 
+{% block content %}
+    
+        <article class="media content-section">
+            <div class="media-body">
+                <div class="flex article-metadata">
+                    <h2><a class="article-title" href="{%  url 'saving-delete' object.id%}">{{ object.goal }}</a></h2>
+                    <a class="mr-2" href="#">{{ object.user }}</a>
+                    <small class="text-muted">{{ object.date_saved|date:"F d, Y" }}</small>
+                    <p class="text-small"> Your target amount is: ksh {{object.target_amount}} </p>
+                </div>
+                {% if object.user == user %}
+                    <div>
+                        <a class="btn btn-secondary btn-sm mt-2 mb-2" href="{% url 'saving-update' object.id%}">Update</a>
+                        <a class="btn btn-danger btn-sm mt-2 mb-2" href="{% url 'income-delete' object.id%}">Delete</a>
+                    </div>
+
+                {% endif%}
+                <p class="text-small"></p>
+                 amount saved is :ksh  {{ object.amount_saved|floatformat:2|intcomma }}
+                </p>
+            </div>
+        </article>
+
+{% endblock %}

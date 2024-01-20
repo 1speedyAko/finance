@@ -1,4 +1,22 @@
 {% extends "finance/base.html" %}
+{% load humanize %} 
 {% block content %}
-    <h1>expense posted</h1>
-{% endblock content %}
+    
+    {% for expense in expense_list %}
+        <article class="media content-section">
+            <div class="media-body">
+                <div class="flex article-metadata">
+                    <a class="mr-2" href="#">{{ expense.user }}</a>
+                    <small class="text-muted">{{ expense.date|date:"F d, Y" }}</small>
+                    <h2><a class="article-title text-muted" href="{% url 'expense-detail' expense.id %}">{{ expense.expense_incured }}</a></h2>
+
+                </div>
+                <h3 class="text-muted"> 
+                  ksh {{ expense.amount_incured|floatformat:2|intcomma }}
+                </h3>
+                <!-- You can add more details here based on your needs -->
+            </div>
+        </article>
+    {% endfor %}
+
+{% endblock %}
