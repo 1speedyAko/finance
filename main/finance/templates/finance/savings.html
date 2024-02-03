@@ -6,9 +6,9 @@
         <article class="media content-section">
             <div class="media-body">
                 <div class="flex article-metadata">
-                    <h2><a class="article-title" href="{%  url 'saving-detail' saving.id%}">{{ saving.goal }}</a></h2>
                     <a class="mr-2" href="#">{{ saving.user }}</a>
                     <small class="text-muted">{{ saving.date_saved|date:"F d, Y" }}</small>
+                    <h2><a class="article-title" href="{%  url 'saving-detail' saving.id %}">{{ saving.goal }}</a></h2>
                     <p class="text-small"> Your target amount is: ksh {{saving.target_amount}} </p>
                 </div>
                 <p class="text-small"></p>

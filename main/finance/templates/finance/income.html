@@ -6,14 +6,14 @@
         <article class="media content-section">
             <div class="media-body">
                 <div class="flex article-metadata">
-                    <h2><a class="article-title" href="#">{{ income.title }}</a></h2>
+                    <h2><a class="article-content" href="{% url 'income-detail' income.id %}"> {{ income.get_category_display }} </a></h2>
                     <a class="mr-2" href="#">{{ income.user }}</a>
                     <small class="text-muted">{{ income.date_joined|date:"F d, Y" }}</small>
                 </div>
                 <h3 class="text-muted"> 
                     {{ income.amount|floatformat:2|intcomma }}
                 </h3>
-                <p class="article-content text-medium">source : {{ income.get_category_display }}</p>
+                <p class=" text-medium">source : </p>
                 <!-- You can add more details here based on your needs -->
             </div>
         </article>

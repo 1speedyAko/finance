@@ -34,7 +34,7 @@ class Income(models.Model):
         return f" posted by {self.user}  is {self.amount}"
     
     def get_absolute_url(self):
-        return reverse('income' )
+        return reverse('income', kwargs = {'pk': self.pk} )
 
 class Savings(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
