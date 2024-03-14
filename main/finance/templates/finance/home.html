@@ -1,38 +1,158 @@
 {% extends "finance/base.html" %}
 {% block content %}
-<div class="mt-4" style="margin-top: 50px;">
+<div class="mt-4" style="margin-top: 100px;">
   <div class="container text-center mt-4 ml-auto ">
-      <div class="row ml-auto ">
-          <div class="col-12 col-md-4 mb-3">
-              <a href="{%url 'income-list'%}" class="card border-primary mb-3 text-decoration-none" style="max-width: 18rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-                  <div class="card-header">Income</div>
-                  <div class="card-body text-primary">
-                      <h5 class="card-title">Primary card title</h5>
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  </div>
-              </a>
-          </div>
-          <div class="col-12 col-md-4 mb-3">
-              <a href="{%url 'expense-list'%}" class="card border-secondary mb-3 text-decoration-none" style="max-width: 18rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-                  <div class="card-header">Expense</div>
-                  <div class="card-body text-secondary">
-                      <h5 class="card-title">Secondary card title</h5>
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  </div>
-              </a>
-          </div>
-          <div class="col-12 col-md-4 mb-3">
-              <a href="{%url 'saving-list'%}" class="card border-success mb-3 text-decoration-none" style="max-width: 18rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-                  <div class="card-header">Savings</div>
-                  <div class="card-body text-success">
-                      <h5 class="card-title">Success card title</h5>
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  </div>
-              </a>
-          </div>
+      <div class="row ml-auto " style="margin-top: 100px;">
+            <div class="col-12 col-md-4 mb-3">
+                <div class="card border-primary mb-3 text-decoration-none" style="max-width: 18rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1)">
+                    <div class="card-header">
+                        <a href="{% url 'income-list' %}" class="text-dark text-decoration-none">Income</a>
+                    </div>
+                    <div class="card-body text-primary">
+                        <h5 class="card-title">
+                            View Income
+                            <span style="font-size: 0.8em;">(View All)</span>
+                        </h5>
+                        <p class="card-text">Click here to view all incomes.</p>
+                    </div>
+                    <a href="{% url 'income-create' %}" class="btn btn-primary stretched-link" style="position: absolute; bottom: 0; left: 0; right: 0;">Add Income</a>
+                </div>
+            </div>
+        
+            
+            <div class="col-12 col-md-4 mb-3">
+                <div class="card border-primary mb-3 text-decoration-none" style="max-width: 18rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1)">
+                    <div class="card-header">
+                        <a href="{% url 'expense-list' %}" class="text-dark text-decoration-none">Expense</a>
+                    </div>
+                    <div class="card-body text-primary">
+                        <h5 class="card-title">
+                            View Expense
+                            <span style="font-size: 0.8em;">(View All)</span>
+                        </h5>
+                        <p class="card-text">Click here to view all expense.</p>
+                    </div>
+                    <a href="{% url 'expense-create' %}" class="btn btn-primary stretched-link" style="position: absolute; bottom: 0; left: 0; right: 0;">Add Expense</a>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-4 mb-3">
+                <div class="card border-primary mb-3 text-decoration-none" style="max-width: 18rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1)">
+                    <div class="card-header">
+                        <a href="{% url 'saving-list' %}" class="text-dark text-decoration-none">Saving</a>
+                    </div>
+                    <div class="card-body text-primary">
+                        <h5 class="card-title">
+                            View Saving
+                            <span style="font-size: 0.8em;">(View All)</span>
+                        </h5>
+                        <p class="card-text">Click here to view all savings.</p>
+                    </div>
+                    <a href="{% url 'saving-create' %}" class="btn btn-primary stretched-link" style="position: absolute; bottom: 0; left: 0; right: 0;">Add Savings</a>
+                </div>
+            </div>
       </div>
   </div>
+
+  <!-- Graph container for expenses and category summaries -->
+  <div style="display: flex; gap: 20px;">
+    <div style="flex: 1;">
+      <canvas id="myChart"></canvas>
+    </div>
+    <div style="flex: 1;">
+      <canvas id="categoryChart"></canvas>
+    </div>
+  </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  // Chart.js initialization for expenses
+  const ctx = document.getElementById('myChart');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: {{ labels|safe }},
+      datasets: [{
+        label: '# of Expenses',
+        data: {{ data|safe }},
+        backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(54, 162, 235, 0.5)', 'rgba(255, 206, 86, 0.5)', 'rgba(75, 192, 192, 0.5)', 'rgba(153, 102, 255, 0.5)'],
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1,
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            color: 'white' // Change color of Y-axis labels to white
+          }
+        },
+        x: {
+          ticks: {
+            color: 'white' // Change color of X-axis labels to white
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          labels: {
+            color: 'white' // Change color of legend text to white
+          }
+        }
+      }
+    }
+  });
+
+  // Extracting labels and data from category_summaries
+  const categoryLabels = [];
+  const categoryData = [];
+  {% for summary in category_summaries %}
+    categoryLabels.push("{{ summary.category }}");
+    categoryData.push({{ summary.total_amount }});
+  {% endfor %}
+
+  // Chart.js initialization for category summaries
+  const ctx2 = document.getElementById('categoryChart');
+
+  new Chart(ctx2, {
+    type: 'bar',
+    data: {
+      labels: categoryLabels,
+      datasets: [{
+        label: 'Category Summaries',
+        data: categoryData,
+        backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(54, 162, 235, 0.5)', 'rgba(255, 206, 86, 0.5)', 'rgba(75, 192, 192, 0.5)', 'rgba(153, 102, 255, 0.5)'],
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1,
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            color: 'white' // Change color of Y-axis labels to white
+          }
+        },
+        x: {
+          ticks: {
+            color: 'white' // Change color of X-axis labels to white
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          labels: {
+            color: 'white' // Change color of legend text to white
+          }
+        }
+      }
+    }
+  });
+
+</script>
 {% endblock content %}
-    
-    

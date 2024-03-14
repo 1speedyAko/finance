@@ -16,16 +16,34 @@
       {% endif %}
 
       <style>
+        /* Apply background image to the body */
         body {
+            position: relative;
             background-image: url('{% static "finance/belgian.jpeg" %}');
             background-size: cover;
             background-repeat: no-repeat;
-            background-attachment: fixed; 
+            background-attachment: fixed;
+            height: 100vh; /* Ensure full viewport height */
+            margin: 0; /* Remove default body margin */
         }
-        .navbar {
-            background-color: rgba(255, 255, 255, 0.9); /* Adjust the transparency as needed */
+
+        /* Create dark overlay */
+        body::before {
+            content: "";
+            position: fixed; /* Fixed position to cover entire viewport */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black color */
+            z-index: -1; /* Set z-index lower than the graphs */
         }
-        /* Add any additional styling for your content here */
+
+        /* Graph container */
+        .graph-container {
+            position: relative; /* Ensure proper stacking context */
+            z-index: 1; /* Set z-index higher than the overlay */
+        }
     </style>
 </head>
 <body >
@@ -64,10 +82,7 @@
                   {% if user.is_authenticated %}
                     <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                     <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
-                    <li><a class="dropdown-item" href="{% url 'income-create' %}">Add Income</a></li>
-                    <li><a class="dropdown-item" href="{% url 'saving-create' %}">Add Savings</a></li>
-                    <li><a class="dropdown-item" href="{% url 'expense-create' %}">Add Expense</li>
-
+                    
                   {% else%}
                     <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
                     <li><a class="dropdown-item" href="{% url 'register' %}">Register</a></li>
@@ -91,6 +106,7 @@
           {% endfor %}
         {% endif %}
         {% block content %}{% endblock %}
+        <h1> some chart info here</h1>
       </div>
   </div>
  </div>

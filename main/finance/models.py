@@ -34,25 +34,25 @@ class Income(models.Model):
         return f" posted by {self.user}  is {self.amount}"
     
     def get_absolute_url(self):
-        return reverse('income', kwargs = {'pk': self.pk} )
+        return reverse('income-list' )
 
 class Savings(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     goal = models.CharField(max_length=30, blank=False)
     target_amount = models.IntegerField(blank=False, default=0)
-    amount_saved = models.DecimalField(max_digits=10 , decimal_places=2, blank=False, default=0)
+    amount_saved = models.IntegerField()
     date_saved = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return str(self.user)
 
     def get_absolute_url(self):
-        return reverse('saving', args=[str(self.pk)])
+        return reverse('saving-list')
 
 class Expense(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    expense_incured = models.CharField(max_length = 30, blank=False, default=0)
-    amount_incured = models.DecimalField(max_digits=10, decimal_places=2)
+    expense_incured = models.CharField(max_length = 30, blank=False)
+    amount = models.IntegerField()
     date = models.DateTimeField(default=timezone.now)
 
 
@@ -60,4 +60,4 @@ class Expense(models.Model):
         return str(self.user)
 
     def get_absolute_url(self):
-        return reverse('expense', kwargs = {'pk': self.pk})
+        return reverse('expense-list')

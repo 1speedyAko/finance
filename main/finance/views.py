@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.views import View
 from .models import Income, Expense, Savings
 from django.http import JsonResponse
+from collections import defaultdict
+from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -9,43 +11,28 @@ from django.urls import reverse_lazy, reverse
 import json
 
 
-class ChartView(View):
-    def get(self, request, *args, **kwargs):
-        savings_data = self.get_savings_data()
-        expense_data = self.get_expense_data()
-        income_data  = self.get_income_data() 
-
-
-        chart_data = {
-            'savings': savings_data,
-            'expense': expense_data,
-            'income ': income_data,
-        }
-
-        return JsonResponse(chart_data)
-
-    def get_savings_data(self):
-        savings = Savings.objects.all()
-        labels = [s.goal for s in savings]
-        data = [float(s.amount_saved) for s in savings]
-        return {'labels': labels, 'data': data, 'chart_type': 'bar'}
-
-    def get_income_data(self):  
-        incomes = Income.objects.all()
-        labels = [i.category for i in incomes]
-        data = [float(i.amount) for i in incomes]
-        return {'labels': labels, 'data': data, 'chart_type': 'bar'}
-
-    def get_expense_data(self):
-        expenses = Expense.objects.all()
-        labels = [e.expense_incured for e in expenses]  # Use 'expense_incured' instead of 'category'
-        data = [float(e.amount_incured) for e in expenses]  # Use 'amount_incured' instead of 'amount_spent'
-        return {'labels': labels, 'data': data, 'chart_type': 'pie'}
 
 @login_required
 def home(request):
-    return render(request, 'finance/home.html', {'title': 'Analytics'})
+    category_summaries = Income.objects.values('category').annotate(total_amount=Sum('amount'))
 
+
+    label_amount_map = defaultdict(int)  # Using defaultdict to initialize unknown keys with 0
+    queryset = Expense.objects.all()  # Fetch all expenses
+    for expense in queryset:
+        label_amount_map[expense.expense_incured] += expense.amount  # Accumulate amounts for each label
+
+    labels = list(label_amount_map.keys())  # Get the labels
+    data = list(label_amount_map.values())  # Get the accumulated amounts
+
+
+
+    return render(request, 'finance/home.html', {
+        'labels': labels,
+        'data': data,
+        'category_summaries': category_summaries,
+
+    })
 
 class IncomeListView(LoginRequiredMixin, ListView):
     model = Income
@@ -107,7 +94,7 @@ class ExpenseDetailView(LoginRequiredMixin, DetailView):
     
 class ExpenseCreateView(LoginRequiredMixin, CreateView):
     model = Expense
-    fields = [ 'expense_incured', 'amount_incured', 'date']
+    fields = [ 'expense_incured', 'amount', 'date']
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -116,7 +103,7 @@ class ExpenseCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('expense-list')
 class ExpenseUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Expense
-    fields = [ 'expense_incured', 'amount_incured', 'date']
+    fields = [ 'expense_incured', 'amount', 'date']
 
     def form_valid(self, form):
         form.instance.user = self.request.user

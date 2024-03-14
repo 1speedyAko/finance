@@ -32,6 +32,10 @@ AUTH_USER_MODEL = 'users.CustomUser'
 # Application definition
 
 INSTALLED_APPS = [
+    'django_light',
+    'admin_tools_stats',
+    'django_nvd3',
+    
     'django.contrib.admin',
     'django.contrib.humanize',
     'django.contrib.auth',
