@@ -5,11 +5,11 @@ from django.urls import reverse
 
 class Category(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    DOG_TRAINING = 'DT'
-    DOG_SALES = 'DS'
-    EQUIPMENT_SALES = 'EQ'
-    KITCHEN = 'KT'
-    DONATIONS = 'DN'
+    DOG_TRAINING = 'Dog Training'
+    DOG_SALES = 'Dog Sales'
+    EQUIPMENT_SALES = 'Equipment Sales'
+    KITCHEN = 'Kitchen'
+    DONATIONS = 'Donnations'
     
     SELECTION_CHOICES = [
         (DOG_TRAINING, 'Dog Training'),
@@ -19,14 +19,15 @@ class Category(models.Model):
         (DONATIONS, 'Donations')
     ]
     
-    user_selection = models.CharField(max_length=2, choices=SELECTION_CHOICES, default=DOG_TRAINING)
+    user_selection = models.CharField(max_length=22, choices=SELECTION_CHOICES, default=DOG_TRAINING)
 
     def __str__(self):
         return f"{self.get_user_selection_display()} - {self.user}" 
 
+  
 class Income(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    category = models.CharField(max_length=2, choices=Category.SELECTION_CHOICES , default = 0)
+    category = models.CharField(max_length=22, choices=Category.SELECTION_CHOICES , default = 0)
     amount = models.IntegerField()
     date_joined = models.DateTimeField(default=timezone.now)
 

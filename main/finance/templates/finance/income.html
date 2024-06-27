@@ -3,7 +3,7 @@
 {% block content %}
     
     {% for income in income_list %}
-        <article class="media content-section">
+        <article class="media content-section" style="margin-top: 100px;">
             <div class="media-body">
                 <div class="flex article-metadata">
                     <h2><a class="article-content" href="{% url 'income-detail' income.id %}"> {{ income.get_category_display }} </a></h2>

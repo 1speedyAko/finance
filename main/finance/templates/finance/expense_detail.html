@@ -1,7 +1,7 @@
 {% extends "finance/base.html" %}
 {% load humanize %} 
 {% block content %}
-    <article class="media content-section">
+    <article class="media content-section" style="margin-top: 100px;">
         <div class="media-body">
             <div class="article-metadata">
                 <a class="mr-2" href="#">{{ object.user }}</a>
@@ -13,6 +13,7 @@
                         <a class="btn btn-secondary btn-sm mt-2 mb-2" href="{% url 'expense-update' object.id%}">Update</a>
                         <a class="btn btn-danger btn-sm mt-2 mb-2" href="{% url 'expense-delete' object.id%}">Delete</a>
                     </div>
+                    <a class="btn btn-primary btn-sm mt-2 mb-2" href="{% url 'we' }">back</a>
 
                 {% endif%}
             </div>
