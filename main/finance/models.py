@@ -10,13 +10,16 @@ class Category(models.Model):
     EQUIPMENT_SALES = 'Equipment Sales'
     KITCHEN = 'Kitchen'
     DONATIONS = 'Donnations'
+    Fresh_Juice = 'Fresh Juice'
     
     SELECTION_CHOICES = [
         (DOG_TRAINING, 'Dog Training'),
         (DOG_SALES, 'Dog Sales'),
         (EQUIPMENT_SALES, 'Equipment Sales'),
         (KITCHEN, 'Kitchen'),
-        (DONATIONS, 'Donations')
+        (DONATIONS, 'Donations'),
+        (Fresh_Juice, 'Fresh Juice')
+
     ]
     
     user_selection = models.CharField(max_length=22, choices=SELECTION_CHOICES, default=DOG_TRAINING)
@@ -29,6 +32,7 @@ class Income(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     category = models.CharField(max_length=22, choices=Category.SELECTION_CHOICES , default = 0)
     amount = models.IntegerField()
+    comment = models.CharField(max_length=30 , default='' )
     date_joined = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
